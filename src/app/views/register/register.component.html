@@ -1,0 +1,112 @@
+<div class="app flex-row align-items-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card mx-4">
+          <div class="card-body p-4" (keydown.enter)="register(user)">
+            <h1>회원가입</h1>
+            <p class="text-muted">Create your account</p>
+            <div class="input-group mb-3">
+              <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+              <input type="text" class="form-control" [(ngModel)]='user.id' placeholder="아이디">
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-addon"><i class="icon-lock"></i></span>
+              <input type="password" class="form-control" [(ngModel)]='user.password' placeholder="비밀번호">
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-addon"><i class="icon-lock"></i></span>
+              <input type="password" class="form-control" [(ngModel)]='repassword' placeholder="비밀번호 확인">
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-addon"><i class="icon-user"></i></span>
+              <input type="text" class="form-control" [(ngModel)]='user.name' placeholder="이름">
+            </div>
+
+            
+            <div class="input-group mb-3">
+              <span class="input-group-addon"><i class="fa fa-hospital-o"></i></span>
+              <select class="form-control" [(ngModel)]='user.hospital'>
+                <option *ngFor="let hospital of hospitals" [ngValue]="hospital">{{hospital}}</option>
+              </select>
+            </div>
+            
+            <div class="input-group mb-3">
+              <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+              <input type="text" class="form-control" [textMask]="{mask: phoneMask}" [(ngModel)]="user.phone" placeholder="(010)-1234-5678">
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-addon">@</span>
+              <input type="text" class="form-control" [(ngModel)]='user.email' placeholder="메일">
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-addon"><i class="fa fa-sticky-note-o"></i></span>
+              <input type="text" class="form-control" [(ngModel)]='user.etc' placeholder="비고">
+            </div>
+
+            <button type="button" class="btn btn-block btn-success" data-toggle="modal" (click)='register(user)'>계정만들기</button>
+          </div>
+          <div class="card-footer p-4">
+            <div class="row">
+              <!-- <div class="col-6">
+                <button class="btn btn-block btn-facebook" type="button"><span>facebook</span></button>
+              </div>
+              <div class="col-6">
+                <button class="btn btn-block btn-twitter" type="button"><span>twitter</span></button>
+              </div> -->
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button type="button" class="invisible" data-toggle="modal" (click)="failureModal.show()"  #failureModalElemRef></button>
+<button type="button" class="invisible" data-toggle="modal" (click)="successModal.show()" #successModalElemRef></button>
+
+<div bsModal #failureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"  (keydown.enter)="failureModalKeydownEnter()">
+  <div class="modal-dialog modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{error.title}}</h4>
+        <button type="button" class="close" (click)="failureModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{error.message}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="faiureModalCloseBtn" (click)="failureModal.hide()">확인</button>
+        <!-- <button type="button" class="btn btn-danger">Save changes</button> -->
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #successModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" (keydown.enter)="successModalKeydownEnter()">
+  <div class="modal-dialog modal-info" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">회원가입 성공</h4>
+        <button type="button" class="close" (click)="successModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>회원가입이 완료되었습니다. 관리자의 승인 후 로그인할 수 있습니다.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" routerLink="/" id="successModalCloseBtn" (click)="successModal.hide()">확인</button>
+        <!-- <button type="button" class="btn btn-info">Save changes</button> -->
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

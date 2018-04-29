@@ -1,0 +1,88 @@
+.container {
+    position: relative;
+
+    width: 516px;
+    height: 290px;
+
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 0px;
+
+    perspective: 800px;
+    // border-radius: 4px;
+    z-index: 1;
+
+    .card {
+        position: absolute;
+        top: 0px;
+    
+        width: 100%;
+        height: 100%;
+        
+        margin: 0px;
+
+        transform-style: preserve-3d;
+        transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        // border-radius: 6px;
+        // box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0px 0px 2px 0.7px rgba(0,0,0,0.23);
+        // cursor: crosshair;
+    
+        div {
+            position: absolute;
+            
+            width: 100%;
+            height: 100%;
+    
+            backface-visibility: hidden;
+            border-radius: 6px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font: 16px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-smoothing: antialiased;
+            color: #47525d;
+        }
+    
+        .back, &.flipped {
+            transform: rotateY(180deg);
+        }
+    
+        .front, .back {
+            width: 100%;
+            height: 100%;
+
+            .box {
+                position: relative;
+
+                .header {
+                    position: absolute;
+                    top: 0px;
+
+                    height: 33px;
+
+                    font-weight: bold;
+                }
+    
+                .content {
+                    position: absolute;
+                    top: 33px;
+                    
+                    height: calc(100% - 33px);
+
+                    canvas {
+                        width: 100% !important;
+                        height: 100% !important;
+                    }
+
+                    .rectangle {
+                        display: none;
+                        border-radius: 0px;
+                        background-color: rgba(80, 80, 80, 0.2);
+                    }
+                }
+            }
+        }
+    }
+}
+

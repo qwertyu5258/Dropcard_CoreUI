@@ -1,0 +1,218 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-sm-6 col-lg-3 animated fadeIn thumbnail" *ngFor="let innerDevice of favoriteDevices[0].devices | thumbnailPipe; let i = 'index'">
+      <div class="card text-white bg-primary">
+        <div class="card-body pb-0">
+          <div class="btn-group float-right" dropdown>
+            <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
+              <i class="icon-settings"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+              <a class="dropdown-item" (click)="tag(innerDevice)">태그</a>
+              <a class="dropdown-item" (click)="alarm(innerDevice)">알람</a>
+            </div>
+          </div>
+          <h4 class="mb-0">{{innerDevice.tag}}</h4>
+          <!-- <p>정상, 경고, 위험</p> -->
+        </div>
+        <!-- <div class="chart-wrapper px-3" style="height:70px;" (click)="toExpand2(innerDevice, i, $event)"> -->
+        <div class="chart-wrapper" style="height:70px;" (click)="toExpand2(innerDevice, i, $event)">
+          <canvas baseChart #thumbnailChart="base-chart" class="chart" [datasets]="innerDevice.thumbnailGraph.lineChartData" [labels]="innerDevice.thumbnailGraph.lineChartLabels" [options]="innerDevice.thumbnailGraph.lineChartOptions" [colors]="innerDevice.thumbnailGraph.lineChartColours"
+            [legend]="innerDevice.thumbnailGraph.lineChartLegend" [chartType]="innerDevice.thumbnailGraph.lineChartType"></canvas>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+    <!-- <div class="card expand" style="display:none" *ngFor="let innerDevice of favoriteDevices[0].devices | expandPipe; let i = 'index'"> -->
+    <div class="card animated fadeIn expand" *ngFor="let innerDevice of favoriteDevices[0].devices | expandPipe; let i = 'index'">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-5">
+            <h4 class="card-title mb-0">{{innerDevice.tag}}</h4>
+            <div class="small text-muted">{{today}}</div>
+          </div><!--/.col-->
+          <div class="col-sm-7 hidden-sm-down">
+            <button type="button" class="btn btn-primary float-right" (click)="toThumbnail2(innerDevice, i, $event)"><i class="icon-arrow-up"></i></button>
+            <!-- <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+              <div class="btn-group mr-3" data-toggle="buttons" aria-label="First group">
+                <label class="btn btn-outline-secondary">
+                  <input type="radio" name="options" id="option1"> Day
+                </label>
+                <label class="btn btn-outline-secondary active">
+                  <input type="radio" name="options" id="option2" checked> Month
+                </label>
+                <label class="btn btn-outline-secondary">
+                  <input type="radio" name="options" id="option3"> Year
+                </label>
+              </div>
+            </div> -->
+          </div><!--/.col-->
+        </div><!--/.row-->
+        <div class="chart-wrapper" style="height:300px;margin-top:40px;">
+          <canvas baseChart #expandChart="base-chart" class="chart" *ngIf="innerDevice.expandGraph.mainChartData; else loading"
+          [datasets]="innerDevice.expandGraph.mainChartData"
+          [labels]="innerDevice.expandGraph.mainChartLabels"
+          [options]="innerDevice.expandGraph.mainChartOptions"
+          [colors]="innerDevice.expandGraph.mainChartColours"
+          [legend]="innerDevice.expandGraph.mainChartLegend"
+          [chartType]="innerDevice.expandGraph.mainChartType"></canvas>
+          <ng-template #loading>Loading Data...</ng-template>
+        </div>
+      </div>
+      <div class="card-footer">
+        <ul>
+          <li>
+            <div class="text-muted">ml</div>
+            <!-- <strong>29.703 Users (40%)</strong> -->
+            <div class="progress progress-xs mt-2">
+              <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </li>
+          <li class="hidden-sm-down">
+            <div class="text-muted">ml / h</div>
+            <!-- <strong>24.093 Users (20%)</strong> -->
+            <div class="progress progress-xs mt-2">
+              <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </li>
+          <!-- <li>
+            <div class="text-muted">Pageviews</div>
+            <strong>78.706 Views (60%)</strong>
+            <div class="progress progress-xs mt-2">
+              <div class="progress-bar bg-warning" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </li>
+          <li class="hidden-sm-down">
+            <div class="text-muted">New Users</div>
+            <strong>22.123 Users (80%)</strong>
+            <div class="progress progress-xs mt-2">
+              <div class="progress-bar bg-danger" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </li>
+          <li class="hidden-sm-down">
+            <div class="text-muted">Bounce Rate</div>
+            <strong>40.15%</strong>
+            <div class="progress progress-xs mt-2">
+              <div class="progress-bar" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </li> -->
+        </ul>
+      </div>
+    </div>
+    <!--/.card-->
+  </div>
+  <!--/.row-->
+
+  <a class="invisible" (click)="tagModal.show()" #tagModalElemRef></a>
+  <a class="invisible" (click)="alarmModal.show()" #alarmModalElemRef></a>
+
+  <div bsModal #tagModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tagModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">태그 설정</h4>
+          <button type="button" class="close" (click)="tagModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <span class="input-group-addon">
+              <i class="icon-tag"></i>
+            </span>
+            <input type="text" class="form-control" [(ngModel)]="selectedDevice.tag">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="tagClose" (click)="tagModal.hide()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="tagSave()">Save changes</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <div bsModal #alarmModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="alarmModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">알람 설정</h4>
+          <button type="button" class="close" (click)="alarmModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>ml</p>
+          <ion-range-slider #sliderElement
+          min={{selectedDevice.alarm.total_weight_min}}
+          max={{selectedDevice.alarm.total_weight_max}}
+          grid="true"
+          from={{selectedDevice.alarm.total_weight_value}}
+          step="5"
+          (onFinish)="sliderFinish('total_weight', $event)">
+          </ion-range-slider>
+          <p>ml / h</p>
+          <ion-range-slider #sliderElement
+          type='double'
+          min={{selectedDevice.alarm.weight_min}}
+          max={{selectedDevice.alarm.weight_max}}
+          grid="true"
+          from={{selectedDevice.alarm.weight_value_from}}
+          to={{selectedDevice.alarm.weight_value_to}}
+          step="5"
+          (onFinish)="sliderFinish('weight', $event)">
+          </ion-range-slider>
+          <!-- <p>문자 수신</p>
+          <label class="switch switch-text switch-pill switch-primary">
+            <input type="checkbox" class="switch-input" checked>
+            <span class="switch-label" data-on="On" data-off="Off"></span>
+            <span class="switch-handle"></span>
+          </label>
+          <p>메일 수신</p>
+          <label class="switch switch-text switch-pill switch-primary">
+            <input type="checkbox" class="switch-input" checked>
+            <span class="switch-label" data-on="On" data-off="Off"></span>
+            <span class="switch-handle"></span>
+          </label>
+          <p>알람(Notification) 수신</p>
+          <label class="switch switch-text switch-pill switch-primary">
+            <input type="checkbox" class="switch-input" checked>
+            <span class="switch-label" data-on="On" data-off="Off"></span>
+            <span class="switch-handle"></span>
+          </label> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="alarmClose" (click)="alarmModal.hide()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="alarmSave()">Save changes</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <!-- <ion-range-slider #sliderElement
+          type="double"
+          [min]="myMinVar"
+          max="100"
+          from="28"
+          from_min="10"
+          from_max="30"
+          from_shadow="true"
+          to="40"
+          to_min="40"
+          to_max="90"
+          to_shadow="true"
+          grid="true"
+          grid_num="10"
+          prefix="Weight: "
+          postfix=" million pounds"
+          decorate_both="false"
+          (onUpdate)="myOnUpdate($event)"
+          (onChange)="myOnChange($event)"
+          (onFinish)="myOnFinish($event)"></ion-range-slider> -->
+
+</div>

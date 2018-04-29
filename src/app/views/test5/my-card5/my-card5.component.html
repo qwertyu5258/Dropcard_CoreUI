@@ -1,0 +1,78 @@
+
+<div class="container" [style.width.px]="width" [style.height.px]='height' [style.left.px]="left" [style.top.px]="top">
+  <div class="card" #card>
+    <div class="front">
+      <div class="box">
+        <div class="header" (mousedown)="zIndexChange($event)" *ngIf="!thumbnail">
+          <i class="icon-cursor-move" *ngIf="!thumbnail_expand" (mousedown)="dragMouseDown($event)" (mousemove)="resizeMouseMove($event)" (mouseup)="resizeMouseUp($event)"
+          (touchstart)="dragTouchStart($event)" (touchmove)="resizeTouchMove($event)" (touchend)="resizeTouchEnd($event)" ></i>
+          <i class="icon-arrow-down" *ngIf="thumbnail_expand" (touchstart)="toThumbnail()"></i>
+          <input type="text" [readonly]="isValid" (click)="updateTag()" (touchstart)="updateTag()" (blur)="blurTag(device.tag)" [(ngModel)]="device.tag" />
+          <i class="fa fa-file-text-o" (click)="flip()"></i>
+          <i class="icon-magnifier-remove" (click)="frontPrevious()" *ngIf="frontMagnifier"></i>
+          <select class="form-control" style="width: 100px;" [(ngModel)]='selectedTime' (change)="onChange(selectedTime)">
+              <option *ngFor="let time of times" [ngValue]="time">{{time}}</option>
+          </select>
+        </div>
+        <div class="header2" (mousedown)="zIndexChange($event)" *ngIf="thumbnail">
+          <p>{{device.tag}}</p>
+        </div>
+        <div class="content">
+            <canvas baseChart class="chart" #frontChart="base-chart" 
+            [datasets]="frontChartData"
+            [labels]="frontChartLabels"
+            [options]="frontChartOptions"
+            [colors]="frontChartColours"
+            [legend]="frontChartLegend"
+            [chartType]="frontChartType"
+            (mousedown)="frontMouseDown($event)"
+            (mousemove)="frontMouseMove($event, 1)"
+            (mouseup)="frontMouseUp($event)"
+            (touchstart)="touchStart($event)"
+            (touchmove)="touchMove($event)"
+            (touchend)="touchEnd($event)"
+            (press)="frontPress()"></canvas>
+            <div class='rectangle' *ngIf="!thumbnail" #frontRectangle (mousemove)="frontMouseMove($event, 2)" (mouseup)='frontMouseUp($event)'></div>
+            <div class='resize' *ngIf="!thumbnail && !thumbnail_expand" (mousedown)="resizeMouseDown($event)" (mousemove)="resizeMouseMove($event)" (mouseup)="resizeMouseUp($event)"
+            (touchstart)="resizeTouchStart($event)" (touchmove)="resizeTouchMove($event)" (touchend)="resizeTouchEnd($event)"></div>
+            <div id="ml_value" *ngIf="!thumbnail">
+              {{ml_value}}
+            </div>
+            <div id="mlh_value" *ngIf="!thumbnail">
+              {{mlh_value}}
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="back">
+      <div class="box">
+        <div class="header" (mousedown)="zIndexChange($event)">
+          <i class="icon-cursor-move" (mousedown)="dragMouseDown($event)" (mousemove)="resizeMouseMove($event)" (mouseup)="resizeMouseUp($event)"
+          (touchstart)="dragTouchStart($event)" (touchmove)="resizeTouchMove($event)" (touchend)="resizeTouchEnd($event)"></i>
+          <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+          <input type="text" daterangepicker (selected)="selectedDate($event, daterange)" style="border:none;" />
+          <i class="fa fa-file-text-o" (click)="flip()"></i>
+          <i class="icon-magnifier-remove" (click)="backPrevious()" *ngIf="backMagnifier"></i>
+        </div>
+        <div class="content">
+            <canvas baseChart class="chart" #backChart="base-chart" 
+            [datasets]="backChartData" 
+            [labels]="backChartLabels" 
+            [options]="backChartOptions" 
+            [colors]="backChartColours"
+            [legend]="backChartLegend" 
+            [chartType]="backChartType" 
+            (mousedown)="backMouseDown($event)" 
+            (mousemove)="backMouseMove($event, 1)" 
+            (mouseup)="backMouseUp($event)"
+            (touchstart)="backTouchStart($event)"
+            (touchmove)="backTouchMove($event)"
+            (touchend)="backTouchEnd($event)"></canvas>
+            <div class='rectangle' #backRectangle (mousemove)="backMouseMove($event, 2)" (mouseup)='backMouseUp($event)'></div>
+            <div class='resize' (mousedown)="resizeMouseDown($event)" (mousemove)="resizeMouseMove($event)" (mouseup)="resizeMouseUp($event)"
+            (touchstart)="resizeTouchStart($event)" (touchmove)="resizeTouchMove($event)" (touchend)="resizeTouchEnd($event)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

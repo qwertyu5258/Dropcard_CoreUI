@@ -1,0 +1,20 @@
+
+  <div class="social-box linkedin">
+    <i class="fa fa-linkedin" style="background-color: rgb(92, 132, 184); color: rgb(92, 132, 184)"></i>
+    <div style="position: absolute; top: 10%; left: 50%; transform:translateX(-50%); width: 150px; color: rgba(255, 255, 255, .5); font-weight: bold; overflow: hidden;">{{device.tag}}</div>
+    <div class="chart-wrapper">
+      <canvas baseChart class="chart" #socialChart="base-chart" [datasets]="socialChartData" [labels]="socialChartLabels" [options]="socialChartOptions"
+        [colors]="socialChartColours" [legend]="socialChartLegend" [chartType]="socialChartType"></canvas>
+    </div>
+    <ul>
+      <li>
+        <strong>{{ml}}</strong>
+        <span>ml</span>
+      </li>
+      <li>
+        <strong>{{mlh}}</strong>
+        <span>ml/h</span>
+      </li>
+    </ul>
+  </div>
+  <!--/.social-box-->
